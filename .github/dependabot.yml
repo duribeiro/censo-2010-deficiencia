@@ -1,0 +1,11 @@
+# O dependabot pode ABRIR pull requests com atualizações de dependências,
+# mas nenhuma delas deve ser mesclada automaticamente. Toda atualização
+# passa pela mesma regra de revisão humana descrita em CONTRIBUTING.md:
+# aprovação de um mantenedor e CI verde, sem merge automático e sem bot mesclando.
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
