@@ -1,0 +1,55 @@
+name: Claude Code Review
+
+# Revisao automatica em todo pull request, incluindo os do Dependabot.
+# O revisor so comenta: ele nunca aprova nem mescla o PR.
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: '--allowedTools "mcp__github_inline_comment__create_inline_comment"'
+          prompt: |
+            Voce e um revisor de pull requests deste repositorio. Revise o diff
+            deste PR e procure por bugs, problemas de seguranca e excesso de
+            engenharia (codigo mais complexo do que o problema exige).
+
+            Siga o checklist de revisao ja fixado no repositorio, nos arquivos
+            .claude/agents/gstack-code-reviewer.md e
+            .claude/agents/gstack-release-checker.md, como guia do que olhar.
+
+            Confira tambem estas regras especificas do projeto:
+            - Identificadores (variaveis, funcoes, componentes, arquivos) em ingles.
+            - Textos visiveis na interface em portugues do Brasil.
+            - Nenhum dado pessoal real (email ou nome de pessoa) no codigo.
+            - Nunca usar travessao (caractere U+2014) nem traco medio (caractere U+2013)
+              em nenhum texto, comentario ou string.
+            - `npm run lint` e `npm run build` precisam passar.
+
+            Se o PR for uma atualizacao de dependencia (por exemplo do
+            Dependabot), diga claramente se e um bump de patch, minor ou major,
+            e o que pode quebrar com essa mudanca.
+
+            Poste comentarios inline nos pontos especificos do diff e um
+            comentario de resumo ao final. Nunca aprove o pull request nem
+            tente mescla-lo, mesmo que o codigo pareca perfeito: essa decisao
+            e sempre de um mantenedor humano.
+
+            Termine o comentario de resumo com uma linha de veredito, exatamente
+            uma destas tres opcoes:
+            "APROVAR", "APROVAR COM RESSALVAS" ou "NAO MESCLAR", seguida de um
+            motivo em uma linha.

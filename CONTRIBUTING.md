@@ -41,7 +41,15 @@ Tipos comuns: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`.
 
 - Todo pull request precisa de pelo menos uma aprovação de um mantenedor antes de ser mesclado.
 - O CI precisa estar verde (lint e build passando).
-- Não há merge automático. Nenhum bot, incluindo o Dependabot, tem permissão para mesclar pull requests: toda mesclagem é feita manualmente por um mantenedor após revisão humana.
+- Não há merge automático para pull requests de pessoas: toda mesclagem é feita manualmente por um mantenedor após revisão humana. A única exceção é a atualização pequena do Dependabot, descrita na seção abaixo, e mesmo essa só mescla depois da aprovação exigida.
+
+## Revisão automática
+
+Todo pull request recebe um comentário de revisão automática, feito por uma inteligência artificial. Ela aponta bugs, problemas de segurança e código complexo demais, mas nunca aprova nem mescla o pull request sozinha: essa decisão continua sendo de um mantenedor.
+
+Qualquer pessoa pode pedir ajuda a qualquer momento escrevendo `@claude` em um comentário do pull request ou da issue.
+
+Atualizações pequenas do Dependabot (patch e minor) entram sozinhas no repositório, mas só depois da aprovação do mantenedor e do CI passando. Saltos de versão maior (major) nunca entram sozinhos: continuam exigindo revisão manual.
 
 ## Boas primeiras tarefas
 

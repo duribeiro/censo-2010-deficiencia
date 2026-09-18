@@ -1,0 +1,43 @@
+# Mescla automatica so para atualizacoes pequenas do Dependabot (patch e
+# minor). O merge automatico do GitHub so acontece depois que o PR tiver a
+# aprovacao humana exigida pela regra de protecao da branch main e o
+# status "build" do CI estiver verde. Este workflow apenas ativa o merge
+# automatico, ele nao aprova nem pula a revisao de ninguem.
+
+name: Dependabot Auto Merge
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ler metadados da atualizacao
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Ativar merge automatico (patch e minor)
+        if: |
+          steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
+          steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Avisar sobre bump major
+        if: steps.metadata.outputs.update-type == 'version-update:semver-major'
+        run: |
+          gh pr comment "$PR_URL" --body "Este e um bump de versao major. Merge automatico desativado: precisa de revisao manual antes de mesclar."
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
