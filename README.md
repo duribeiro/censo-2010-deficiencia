@@ -4,7 +4,7 @@ Painel interativo com os dados do Censo Demográfico 2010 do IBGE sobre pessoas 
 
 ![Dashboard](docs/screenshot.jpg)
 
-<!-- ajuste depois do primeiro deploy -->
+
 **Ver online:** [https://censo-2010-deficiencia.vercel.app](https://censo-2010-deficiencia.vercel.app)
 
 ## O que o painel mostra
