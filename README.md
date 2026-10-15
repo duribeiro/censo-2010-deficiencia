@@ -68,3 +68,7 @@ Boas primeiras tarefas:
 ## Licença
 
 Distribuído sob a licença MIT. Veja [LICENSE](LICENSE).
+
+## Presentation
+
+Pitch deck from Semana da Tecnologia UNASP 2026: [online](https://ribeiroedu.com/semana-tech/censo/) · [PDF](presentation/slides.pdf) · [source](presentation/index.html)
